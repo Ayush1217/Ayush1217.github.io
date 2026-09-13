@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You Susmita Bhabhi</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=Playfair+Display:ital,wght@1,600;1,800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #09090b;
+            --accent-glow-1: rgba(236, 72, 153, 0.15);
+            --accent-glow-2: rgba(168, 85, 247, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Ambient background glow */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--accent-glow-1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, var(--accent-glow-2) 0%, transparent 50%);
+            filter: blur(80px);
+        }
+
+        /* Subtle fixed top banner */
+        .header-tag {
+            position: fixed;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #e2e8f0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            user-select: none;
+        }
+
+        /* Main feed container */
+        .feed-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 1rem 4rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.8rem;
+        }
+
+        /* Text Item Block */
+        .thank-you-card {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 1rem;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            cursor: default;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px) scale(0.97);
+            animation: cardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .thank-you-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Main Text Style */
+        .text-main {
+            font-size: clamp(2.2rem, 6.8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 25%, #7928ca 70%, #4338ca 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 20px rgba(236, 72, 153, 0.25));
+            transition: filter 0.3s ease;
+        }
+
+        /* Alternate gradient style for visual rhythm */
+        .thank-you-card.alt-style .text-main {
+            background: linear-gradient(135deg, #f59e0b 0%, #ec4899 40%, #8b5cf6 80%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 20px rgba(245, 158, 11, 0.25));
+        }
+
+        .thank-you-card:hover .text-main {
+            filter: drop-shadow(0 6px 30px rgba(236, 72, 153, 0.6));
+        }
+
+        /* Subtitle/Badge line */
+        .sub-badge {
+            margin-top: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+            color: #94a3b8;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        .sparkle-icon {
+            color: #fbbf24;
+            font-size: 1.1em;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        /* Loading indicator for infinite scroll */
+        .scroll-indicator {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 2rem;
+            color: #64748b;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: #ec4899;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        /* Keyframes */
+        @keyframes cardEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.35); opacity: 1; filter: drop-shadow(0 0 6px #fbbf24); }
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg"></div>
+    <div class="header-tag">✨ Scroll Forever ✨</div>
+
+    <main class="feed-container" id="feed-container">
+        <!-- Dynamic infinite items injected here -->
+    </main>
+
+    <div class="scroll-indicator" id="scroll-indicator">
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+        <span>Loading more gratitude</span>
+    </div>
+
+    <script>
+        const feedContainer = document.getElementById('feed-container');
+        let counter = 0;
+        let isFetching = false;
+
+        const subMessages = [
+            "With Endless Gratitude & Love",
+            "Always Appreciated & Celebrated",
+            "Best Wishes & Happiness Always",
+            "Forever Grateful for Everything",
+            "You Are The Absolute Best"
+        ];
+
+        // Function to create a card element
+        function createThankYouCard(index) {
+            const card = document.createElement('div');
+            card.className = `thank-you-card ${index % 2 === 1 ? 'alt-style' : ''}`;
+            
+            // Randomize sub-message
+            const subMessage = subMessages[index % subMessages.length];
+
+            card.innerHTML = `
+                <div class="text-main">THANK YOU SUSMITA BHABHI</div>
+                <div class="sub-badge">
+                    <span class="sparkle-icon">✨</span>
+                    <span>${subMessage}</span>
+                    <span class="sparkle-icon">✨</span>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Batch load cards
+        function loadBatch(count = 10) {
+            for (let i = 0; i < count; i++) {
+                counter++;
+                const card = createThankYouCard(counter);
+                feedContainer.appendChild(card);
+            }
+        }
+
+        // Initialize first batch
+        loadBatch(12);
+
+        // Infinite scroll observer & listener
+        function checkScroll() {
+            if (isFetching) return;
+
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const threshold = document.documentElement.scrollHeight - 600;
+
+            if (scrollPosition >= threshold) {
+                isFetching = true;
+                loadBatch(8);
+                // Tiny debounce release
+                setTimeout(() => {
+                    isFetching = false;
+                }, 100);
+            }
+        }
+
+        window.addEventListener('scroll', checkScroll, { passive: true });
+        window.addEventListener('resize', checkScroll);
+    </script>
+</body>
+</html>
